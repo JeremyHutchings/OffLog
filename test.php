@@ -91,7 +91,7 @@ echo "<br />Memcache connection - Success... ";
  */
 
 
-echo "<br />" . $loggingClient->logSimpleAction(1,1, 'test string');
+echo "<br />" . $loggingClient->logSimpleAction(1, ACTION_USER_LOGON, 'test string');
 echo "<br />logSimpleAction";
 
 
