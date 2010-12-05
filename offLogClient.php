@@ -50,9 +50,16 @@ class offLogClient
 	 * 
 	 * @return 	string	job id handel    
 	 */
-	public function logSimpleAction($userId, $actionId, $payLoad)
+	public function logSimpleAction($userId, $actionId, $payLoad = NULL)
 	{
-		return $this->gmClient->doBackground('logSimple', json_encode(array('userid' => $userId, 'actionId' => $actionId, 'payload' => $payLoad)));
+		if ($payLoad)
+		{
+			return $this->gmClient->doBackground('logSimple', json_encode(array('userid' => $userId, 'actionId' => $actionId, 'payload' => $payLoad)));
+		}
+		else
+		{
+			return $this->gmClient->doBackground('logSimple', json_encode(array('userid' => $userId, 'actionId' => $actionId)));
+		}
 	}	
 
 	
