@@ -61,6 +61,13 @@ $offLogCfg['database']['prefix']   = 'ol_';
 
 
 
+/**
+ * Actions
+ */
+
+define("ACTION_USER_LOGON", 	1);
+define("ACTION_USER_INVALID",	2);
+
 
 
 
