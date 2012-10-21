@@ -3,29 +3,33 @@ OffLog - Off-loading Logging
 OffLog is a logging ring buffer and pre-aggregator designed to handel large numbers 
 of client actions being logged, without effecting the performance of :
 
-	A) The client script 
-	B) The production database for application
+    A) The client script
+    B) The production database for application
 
-
+************
 Components :
 
-	*	Gearman		Job offloader
-	* 	Memcache 	Ring buffer and pre-aggregator
-	* 	LAMP		All demo code in PHP, persistant storage is MySQL.
+    *   Gearman     Job offloader
+    *   Memcache    Ring buffer and pre-aggregator
+    *   LAMP        All demo code in PHP, persistant storage is MySQL.
 
-
-Terms :
-    * Cn - Client<number> 		Script uses offLogClient to hand off log actions to 
-    							gearman as to not inturrupt script
-    							
-    * Wn - Worker<number>		Maintains persistant connection to memecache and 
-    							gearman sever to move the log job data from gearman
-    							to the counter/location in memcache
     
-    * 0-5 - Time slice  		The 6 * 10 min time slices in memcache which make up
-    							the ring buffer. Workers log to current time slice of 
-    							hour, 00-09 mins = 0, 10-19 = 1, 20-29 = 2 etc.
-    							
+************
+Terms :
+    * Cn - Client<number>
+
+Script uses offLogClient to hand off log actions to gearman as to not inturrupt script
+
+    * Wn - Worker<number>
+
+Maintains persistant connection to memecache and gearman sever to move the log job data from gearman to the counter/location in memcache
+
+    * 0-5 - Time slice
+
+The 6 * 10 min time slices in memcache which make up the ring buffer. Workers log to current time slice of hour, 00-09 mins = 0, 10-19 = 1, 20-29 = 2 etc.
+
+
+************
 Process :
 
    1. Client script passes userid and action id with log vales to gearman and keeps running
@@ -34,22 +38,19 @@ Process :
    
    3. Gearman passes job to worker
    
-   3. Worker places info in memcache (updating userid & actionid count) as well as ensuring 
-      userid and action is in the registers so it can be found again later
+   3. Worker places info in memcache (updating userid & actionid count) as well as ensuring userid and action is in the registers so it can be found again later
    
-   4. As the log passed over 10 mins the workers move to the next slice, leaving a full 
-   	  slice behind them
+   4. As the log passed over 10 mins the workers move to the next slice, leaving a full slice behind them
    	  
-   5. Ever 10 mins the cron runs and gets the register from two slices ago, so there is always
-      one full slice between where is being read from and written to. To avoid over lap.
+   5. Ever 10 mins the cron runs and gets the register from two slices ago, so there is always one full slice between where is being read from and written to. To avoid over lap.
       
-   6. Cron foreach (userid) { foreach (action) { Get all the keys per action, per user from 
-      memcache and wrap them into 1 insert and process}}
+   6. Cron foreach (userid) { foreach (action) { Get all the keys per action, per user from  memcache and wrap them into 1 insert and process}}
 
+   
+************
 Rational
 
-    * Architecture - Can add lots of front end machines with 1 gearman instance connecting to 
-      the same reporting backend aggregator
+    * Architecture - Can add lots of front end machines with 1 gearman instance connecting to the same reporting backend aggregator
       
     * The SQL count dosen't rise per volume, only 1-1 with active user grouth
     

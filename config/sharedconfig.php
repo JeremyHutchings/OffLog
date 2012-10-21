@@ -10,10 +10,8 @@
  *
  * @category   Reporting
  * @package    Reporting
- * @author     jeremy <jeremy@metalcat.net>
+ * @author     Jeremy Hutchings <email@jeremyhutchings.com>
  * @license    http://en.wikipedia.org/wiki/MIT_License
- * @version    SVN: $Id$
- * @link       http://www.metalcat.net/offlog/
  * 
  */
 
